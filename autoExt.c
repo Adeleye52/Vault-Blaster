@@ -1,7 +1,12 @@
 #include<stdio.h>
-#include<conio.h>
 #include<string.h>
+#ifdef _WIN32
+#include<conio.h>
+#else
+int getch(void);
+#endif
 
+void readLine(char *buf, int maxLen);
 void manuExt(char *enFileName);
 int getExt(char fileName[],char ext[]);
 int fileWrite(char *inFileName,char *outFileName,unsigned char key);
@@ -24,7 +29,7 @@ void autoExt(char *enFileName)
     {
         printf("\nDetected File Extension: %s\nKEY: %d\n",fext,i);
         printf("Enter New File Name to save: ");
-        gets(deFileName);
+        readLine(deFileName, sizeof(deFileName));
         strcat(deFileName,fext);
         printf("\nMaking File...");
         err=fileWrite(enFileName,deFileName,(unsigned char)i);

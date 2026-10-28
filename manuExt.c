@@ -1,5 +1,6 @@
 #include<stdio.h>
 
+void readLine(char *buf, int maxLen);
 int fileWrite(char *inFileName, char *outFileName, unsigned char key);
 
 void manuExt(char *enFileName)
@@ -8,7 +9,7 @@ void manuExt(char *enFileName)
     int i,err;
 
     printf("\nEnter Decrypted File Extension: ");
-    gets(fext);
+    readLine(fext, sizeof(fext));
 
     printf("\n\nMaking file.....");
     for(i=0; i<256; i++)

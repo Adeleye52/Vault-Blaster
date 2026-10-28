@@ -37,6 +37,9 @@
 		<Unit filename="autoExt.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="batchDec.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="funcs.c">
 			<Option compilerVar="CC" />
 		</Unit>

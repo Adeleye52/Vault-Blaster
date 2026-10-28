@@ -1,11 +1,16 @@
 #include<stdio.h>
 #include<string.h>
+#ifdef _WIN32
 #include<conio.h>
+#else
+int getch(void);
+#endif
 
+void readLine(char *buf, int maxLen);
 unsigned char getKey(int x);
 int havFile(char *fname);
 int fileWrite(char *inFileName, char *outFileName, unsigned char key);
-int getExt(char fileName[],char ext[]);
+int getExtWithKey(char fileName[], unsigned char key, char ext[]);
 
 void havKey(void)
 {
@@ -14,25 +19,25 @@ void havKey(void)
     int exErr,err;
 
     printf("\nEnter file Name (with extension):");
-    gets(fileName);
+    readLine(fileName, sizeof(fileName));
     while(!havFile(fileName))
     {
         printf("\n\aFile Not Found! Make sure you have entered correct file name with extension.\nPlease enter again: ");
-        gets(fileName);
+        readLine(fileName, sizeof(fileName));
     }
     key=getKey(0);
     printf("\nEnter New File Name: ");
-    gets(deFileName);
+    readLine(deFileName, sizeof(deFileName));
 
     printf("\nWant to use automatic file type detection?\n\tY=Yes\n\tAnyKey=No");
     choice=getch();
     if(choice=='y' || choice=='Y')
     {
-        exErr=getExt(fileName,fext);
+        exErr=getExtWithKey(fileName,key,fext);
         if(exErr<0)
         {
             printf("\nAutomatic file type detection failed!\nPlease Enter File extension:");
-            gets(fext);
+            readLine(fext, sizeof(fext));
             strcat(deFileName,".");
             strcat(deFileName,fext);
         }
@@ -47,7 +52,7 @@ void havKey(void)
     else
     {
         printf("\nEnter file extension: ");
-        gets(fext);
+        readLine(fext, sizeof(fext));
         strcat(deFileName,".");
         strcat(deFileName,fext);
     }
