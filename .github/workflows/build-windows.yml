@@ -1,0 +1,43 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '**.c'
+      - '**.h'
+      - '.github/workflows/build-windows.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile Vault-Blaster.exe (MinGW GCC)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path bin/Release | Out-Null
+          gcc -O2 -s -Wall -static main.c funcs.c havKey.c noKey.c autoExt.c manuExt.c batchDec.c about.c -o bin/Release/Vault-Blaster.exe
+
+      - name: Upload Vault-Blaster.exe Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vault-Blaster-Windows
+          path: bin/Release/Vault-Blaster.exe
+
+      - name: Commit updated Vault-Blaster.exe to repo
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bin/Release/Vault-Blaster.exe
+          if ((git status --porcelain) -ne $null) {
+            git commit -m "Update compiled Windows executable Vault-Blaster.exe [skip ci]"
+            git push
+          }
